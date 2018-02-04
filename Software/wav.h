@@ -1,9 +1,16 @@
 /*
-    https://www.daniweb.com/programming/software-development/threads/340334/reading-audio-file-in-c
+    Entity name:    wav.h
 
-    Author: vineeshvs
-    Date: 6 years ago
-    Accessed: 1/29/2018 
+    Author:         vineeshvs
+
+    Date:           Jan 29, 2018
+
+    Project:        ECE 492 Capstone Project - Virtual Piano
+
+    Description:    This file is a header file for reading and writing wav files.
+
+    Derived from:   vineeshvs
+                    https://www.daniweb.com/programming/software-development/threads/340334/reading-audio-file-in-c
 */
 
 #include <inttypes.h>
