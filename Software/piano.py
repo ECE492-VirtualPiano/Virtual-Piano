@@ -37,7 +37,7 @@ def stretch(snd_array, factor, window_size, h):
         result[i2: i2 + window_size] += hanning_window*a2_rephased.real
 
     # normalize (16bit)
-    result = ((2**(16-2)) * result/result.max())
+    result = ((2**(12)) * result/result.max())
 
     return result.astype('int16')
 
@@ -51,39 +51,6 @@ def pitchshift(snd_array, n, window_size=2**14, h=2**12):
 
 def main():
     fps, sound = wavfile.read("c_chopped.wav")
-    wavfile.write('track1.wav', fps, pitchshift(sound, 24, 2**10, 2**8))
-
-    w = 8
-    h = 7
-
-    # wavfile.write('w' + str(w) + 'h' + str(h) + '.wav', fps, pitchshift(sound, 0
-    #     , 2**w, 2**h))
-    # w += 1
-    # # h += 1
-
-    # wavfile.write('w' + str(w) + 'h' + str(h) + '.wav', fps, pitchshift(sound, 0
-    #     , 2**w, 2**h))
-    # w += 1
-    # # h += 1
-
-    # wavfile.write('w' + str(w) + 'h' + str(h) + '.wav', fps, pitchshift(sound, 0
-    #     , 2**w, 2**h))
-    # w += 1
-    # # h += 1
-
-    # wavfile.write('w' + str(w) + 'h' + str(h) + '.wav', fps, pitchshift(sound, 0
-    #     , 2**w, 2**h))
-    # w += 1
-    # # h += 1
-
-    # wavfile.write('w' + str(w) + 'h' + str(h) + '.wav', fps, pitchshift(sound, 0
-    #     , 2**w, 2**h))
-    # w += 1
-    # # h += 1
-
-    # wavfile.write('w' + str(w) + 'h' + str(h) + '.wav', fps, pitchshift(sound, 0
-    #     , 2**w, 2**h))
-    # w += 1
-    # # h += 1
+    wavfile.write('test_py.wav', fps, pitchshift(sound, 1, 2**10, 2**8))
 
 main()

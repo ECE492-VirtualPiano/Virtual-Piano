@@ -318,7 +318,7 @@ void stretch(Sample **samples, Sample **samples_t, float factor, int window_size
 	// Normalize the waveform (16 bit)
 	for (int i = 0; i < (*samples_t)->size; ++i)
 	{
-		float value = (pow(2, 14) * result[i] / max);
+		float value = (pow(2, 12) * result[i] / max);
 		(*samples_t)->data[i] = (int16_t)value;
 	}
 
@@ -328,8 +328,13 @@ void stretch(Sample **samples, Sample **samples_t, float factor, int window_size
 	free(cfg_i);
 }
 
-// Testing 
-int main()
+
+/*
+	Name: 			void pitchshiftTest()
+	
+	Description: 	Output a transformed waveform for testing
+*/ 
+void pitchshiftTest()
 {
 	// Print the information of the wav file read
     int16_t *samples = NULL;
@@ -347,53 +352,26 @@ int main()
     samples_c->data = samples;
     samples_c->size = header->datachunk_size / sizeof(int16_t);
 
-    // Alternating output Sample waveform
-    Sample *samples_t0 = NULL, *samples_t1 = NULL;   
-
-    // Waveforms with different tones
-	Sample *samples0 = NULL, *samples1 = NULL, *samples2 = NULL, *samples3 = NULL,
-		   *samples4 = NULL, *samples5 = NULL, *samples6 = NULL, *samples7 = NULL, 
-		   *samples8 = NULL;
+    // Output Sample waveform
+    Sample *samples_t = NULL;
 
     // Shift pitches to get different sounds
-    pitchshift(&samples_c, &samples_t0, 0);
-    pitchshift(&samples_c, &samples0, -1);
-    pitchshift(&samples_c, &samples1, -2);  
-    pitchshift(&samples_c, &samples2, -3);  
-    pitchshift(&samples_c, &samples3, -4);  
-    pitchshift(&samples_c, &samples4, -5);   
-    pitchshift(&samples_c, &samples5, -6);   
-    pitchshift(&samples_c, &samples6, -7);   
-    pitchshift(&samples_c, &samples7, -8);   
-
-    printf("Pitchshift done!\n");
-
-    // Combine all the waveforms into one waveform
-    superposition(&samples_t0, &samples0, &samples_t1, samples_t0->size - samples_c->size / 2);
-    superposition(&samples_t1, &samples1, &samples_t0, samples_t1->size - samples_c->size / 2);
-    superposition(&samples_t0, &samples2, &samples_t1, samples_t0->size - samples_c->size / 2);
-    superposition(&samples_t1, &samples3, &samples_t0, samples_t1->size - samples_c->size / 2);
-	superposition(&samples_t0, &samples4, &samples_t1, samples_t0->size - samples_c->size / 2);
-	superposition(&samples_t1, &samples5, &samples_t0, samples_t1->size - samples_c->size / 2);
-	superposition(&samples_t0, &samples6, &samples_t1, samples_t0->size - samples_c->size / 2);
-	superposition(&samples_t1, &samples7, &samples_t0, samples_t1->size - samples_c->size / 2);
+    pitchshift(&samples_c, &samples_t, 1);
 
     // Write the result waveform into a wav file
-    header->datachunk_size = samples_t0->size * sizeof(int16_t);
-    wavwrite("track2.wav", samples_t0->data, samples_t0->size);
+    header->datachunk_size = samples_t->size * sizeof(int16_t);
+    wavwrite("test_c.wav", samples_t->data, samples_t->size);
 
     // Free the memories
     free(header);
     free(samples_c->data);
     free(samples_c);
-    free(samples_t0->data);
-    free(samples_t0);
-    free(samples_t1->data);
-    free(samples_t1);
-    free(samples0->data);
-    free(samples0);
-    free(samples1->data);
-    free(samples1);    
+    free(samples_t->data);
+    free(samples_t);
 
-    return 0;
+}
+
+int main()
+{
+	pitchshiftTest();
 }
