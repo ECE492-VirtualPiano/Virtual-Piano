@@ -17,20 +17,10 @@
 				  	https://github.com/Zulko/pianoputer
 */
 
+#include "piano.h"
 
-#include <stdio.h>
-#include <math.h>
-#include "wav.h"
-#include "kiss_fft.h"
-
-#define PI 3.1415926535897932384626
-
-/* Method declarations */
-void pitchshift(Sample **samples, Sample **samples_t, int n);
-void speedx(Sample **samples, Sample **samples_t, float factor);
-void superposition(Sample **samples1, Sample **samples2, Sample **samples_t, int offset);
-void stretch(Sample **samples, Sample **samples_t, float factor, int window_size, int h);
-
+Sample *SAMPLE_C1 = NULL, *SAMPLE_C2 = NULL, *SAMPLE_C3 = NULL, *SAMPLE_C4 = NULL,
+	   *SAMPLE_C5 = NULL, *SAMPLE_C6 = NULL, *SAMPLE_C7 = NULL, *SAMPLE_C8 = NULL; 
 /*
 	Name: 			void pitchshift(samples, samples_t, n)
 	
@@ -337,41 +327,79 @@ void stretch(Sample **samples, Sample **samples_t, float factor, int window_size
 void pitchshiftTest()
 {
 	// Print the information of the wav file read
-    int16_t *samples = NULL;
-    wavread("c_chopped.wav", &samples);
-    printf("No. of channels: %d\n",     header->num_channels);
-    printf("Sample rate:     %d\n",     header->sample_rate);
-    printf("Bit rate:        %dkbps\n", header->byte_rate*8 / 1000);
-    printf("Bits per sample: %d\n\n",     header->bps);
-    printf("Sample 0:        %d\n", samples[0]);
-    printf("Sample 1:        %d\n", samples[1]);
-    printf("Sample 2:        %d\n", samples[2]);
+    wavread("C1.wav", &SAMPLE_C1);
+    wavread("C2.wav", &SAMPLE_C2);
+    wavread("C3.wav", &SAMPLE_C3);
+    wavread("C4.wav", &SAMPLE_C4);
+    wavread("C5.wav", &SAMPLE_C5);
+    wavread("C6.wav", &SAMPLE_C6);
+    wavread("C7.wav", &SAMPLE_C7);
+    wavread("C8.wav", &SAMPLE_C8);
 
-    // Create the Sample object to hold the waveform
-    Sample *samples_c = (Sample*)malloc(sizeof(Sample));
-    samples_c->data = samples;
-    samples_c->size = header->datachunk_size / sizeof(int16_t);
+	Sample *samples = NULL;
 
-    // Output Sample waveform
-    Sample *samples_t = NULL;
+	for (int i = C1_LOW; i <= C8_HIGH; ++i)
+	{
+		generateSound(i, &samples);
 
-    // Shift pitches to get different sounds
-    pitchshift(&samples_c, &samples_t, 1);
+		char filename[10];
+		sprintf(filename, "%i.wav", i);
 
-    // Write the result waveform into a wav file
-    header->datachunk_size = samples_t->size * sizeof(int16_t);
-    wavwrite("test_c.wav", samples_t->data, samples_t->size);
+		wavwrite(filename, &samples);
 
-    // Free the memories
-    free(header);
-    free(samples_c->data);
-    free(samples_c);
-    free(samples_t->data);
-    free(samples_t);
-
+		free(samples);
+		samples = NULL;
+	}  
 }
 
-int main()
+void generateSound(int index, Sample **samples_t) 
 {
-	pitchshiftTest();
+	if (index >= C1_LOW && index <= C1_HIGH)
+	{
+		pitchshift(&SAMPLE_C1, samples_t, index - C1);
+	}
+	else if (index >= C2_LOW && index <= C2_HIGH)
+	{
+		pitchshift(&SAMPLE_C2, samples_t, index - C2);
+	}
+	else if (index >= C3_LOW && index <= C3_HIGH)
+	{
+		pitchshift(&SAMPLE_C3, samples_t, index - C3);
+	}
+	else if (index >= C4_LOW && index <= C4_HIGH)
+	{
+		pitchshift(&SAMPLE_C4, samples_t, index - C4);
+	}
+	else if (index >= C5_LOW && index <= C5_HIGH)
+	{
+		pitchshift(&SAMPLE_C5, samples_t, index - C5);
+	}
+	else if (index >= C6_LOW && index <= C6_HIGH)
+	{
+		pitchshift(&SAMPLE_C6, samples_t, index - C6);
+	}
+	else if (index >= C7_LOW && index <= C7_HIGH)
+	{
+		pitchshift(&SAMPLE_C7, samples_t, index - C7);
+	}
+	else if (index >= C8_LOW && index <= C8_HIGH)
+	{
+		pitchshift(&SAMPLE_C8, samples_t, index - C8);
+	}
+}
+
+int main() 
+{
+	//pitchshiftTest();
+
+	Sample *s22 = NULL, *s23 = NULL, *s2223 = NULL;
+
+	wavread("22.wav", &s22);
+	wavread("23.wav", &s23);
+
+	superposition(&s22, &s23, &s2223, 0);
+
+	wavwrite("2223.wav", &s2223);
+
+	return 0;
 }
