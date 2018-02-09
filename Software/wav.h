@@ -43,7 +43,7 @@ typedef struct {
 
 WavHeader *header;
 
-void wavread(char *file_name, int16_t **samples)
+void wavread(char *file_name, Sample **samples)
 {
     int fd;
     if (!file_name)
@@ -60,26 +60,28 @@ void wavread(char *file_name, int16_t **samples)
     if (header->audio_format != 1)
         errx(1, "Only PCM encoding supported");
     if (*samples) free(*samples);
-    *samples = (int16_t*)malloc(header->datachunk_size);
-    if (!*samples)
+    *samples = (Sample*)malloc(sizeof(Sample));
+    (*samples)->data = (int16_t*)malloc(header->datachunk_size);
+    (*samples)->size = header->datachunk_size / sizeof(int16_t);
+    if (!((*samples)->data))
         errx(1, "Error allocating memory");
-    if (read(fd, *samples, header->datachunk_size) < header->datachunk_size)
+    if (read(fd, (*samples)->data, header->datachunk_size) < header->datachunk_size)
         errx(1, "File broken: samples");
     close(fd);
 }
 
-void wavwrite(char *file_name, int16_t *samples, int size)
+void wavwrite(char *file_name, Sample **samples)
 {
     int fd;
     if (!file_name)
         errx(1, "Filename not specified");
-    if (!samples)
+    if (!(*samples) && !((*samples)->data))
         errx(1, "Samples buffer not specified");
     if ((fd = creat(file_name, 0666)) < 1)
         errx(1, "Error creating file");
     if (write(fd, header, sizeof(WavHeader)) < sizeof(WavHeader))
         errx(1, "Error writing header");
-    if (write(fd, samples, size * sizeof(int16_t)) < size * sizeof(int16_t))
+    if (write(fd, (*samples)->data, (*samples)->size * sizeof(int16_t)) < (*samples)->size * sizeof(int16_t))
         errx(1, "Error writing samples");
     close(fd);
 }
