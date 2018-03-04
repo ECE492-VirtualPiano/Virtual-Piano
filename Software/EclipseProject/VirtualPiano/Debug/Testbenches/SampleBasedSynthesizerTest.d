@@ -1,0 +1,9 @@
+Testbenches/SampleBasedSynthesizerTest.o: ../Testbenches/SampleBasedSynthesizerTest.c
+Testbenches/SampleBasedSynthesizerTest.o: ../Testbenches/../Synthesizer/piano.h
+Testbenches/SampleBasedSynthesizerTest.o: ../Testbenches/../Synthesizer/../KissFFT/kiss_fft.h
+Testbenches/SampleBasedSynthesizerTest.o: ../Testbenches/../Synthesizer/samples.h
+Testbenches/SampleBasedSynthesizerTest.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/uCOS-II/Source/os.h
+Testbenches/SampleBasedSynthesizerTest.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/uCOS-II/Source/ucos_ii.h
+Testbenches/SampleBasedSynthesizerTest.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/APP/app_cfg.h
+Testbenches/SampleBasedSynthesizerTest.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/APP/os_cfg.h
+Testbenches/SampleBasedSynthesizerTest.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/uCOS-II/Ports/os_cpu.h

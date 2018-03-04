@@ -1,0 +1,12 @@
+HWLIBS/timer.o: ../HWLIBS/timer.c
+HWLIBS/timer.o: C:/intelFPGA/17.0/embedded/ip/altera/hps/altera_hps/hwlib/include/soc_cv_av/socal/hps.h
+HWLIBS/timer.o: C:/intelFPGA/17.0/embedded/ip/altera/hps/altera_hps/hwlib/include/soc_cv_av/socal/socal.h
+HWLIBS/timer.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/uC-LIBS/lib_def.h
+HWLIBS/timer.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/uC-CPU/cpu_def.h
+HWLIBS/timer.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/uC-CPU/ARM-Cortex-A/cpu.h
+HWLIBS/timer.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/APP/cpu_cfg.h
+HWLIBS/timer.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/uCOS-II/Ports/os_cpu.h
+HWLIBS/timer.o: ../HWLIBS/timer.h
+HWLIBS/timer.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/uCOS-II/Source/ucos_ii.h
+HWLIBS/timer.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/APP/app_cfg.h
+HWLIBS/timer.o: C:/Users/kwong4/Downloads/Newfolder/Project2/software/VirtualPiano/APP/os_cfg.h
