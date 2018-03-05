@@ -1,10 +1,39 @@
-#include  <time.h>
-#include  "../Synthesizer/piano.h"
+/*
+*********************************************************************************************************
+*
+*                               SAMPLE-BASED SYNTHESIZER TESTBENCH CODE
+*
+*                                         CYCLONE V SOC
+*
+* Filename      : SampleBasedSynthesizerTest.c
+* Version       : V1.00
+* Programmer(s) : Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
+* References    : 
+*********************************************************************************************************
+* Note(s)       : This file is used to test the functionality of the sample-based synthesizer code.
+				  The functions in this testbench test the speed of each of the core functions in the 
+				  synthesizer, as well as provides inside information on the state of the stack before 
+				  and after function execution.
+*********************************************************************************************************
+*/
 
-#include  <os.h>
+#include "SampleBasedSynthesizerTest.h"
 
 kiss_fft_cfg cfg, cfg_i;
 
+
+/*
+	Name: 			void pitchshiftSpeedTest(Sample *inputSample, int semitone) 
+	
+	Description: 	Tests the speed of the pitchshift function from piano.c
+
+	Inputs: 		
+			Sample* 	inputSample  	The input sample waveform
+			int 		semitone		The number of semitones
+
+	Outputs:
+			Prints the execution time of the pitchshift function
+*/
 void pitchshiftSpeedTest(Sample *inputSample, int semitone) 
 {
 	if (inputSample == NULL) 
@@ -34,6 +63,18 @@ void pitchshiftSpeedTest(Sample *inputSample, int semitone)
 	printf("Time: %f milliseconds\n", time_diff);
 }
 
+/*
+	Name: 			void speedxSpeedTest(Sample *testSample, float factor) 
+	
+	Description: 	Tests the speed of the speedx function from piano.c
+
+	Inputs: 		
+			Sample* 	testSample  	The input sample waveform
+			int 		factor			The scaling factor of the wave
+
+	Outputs:
+			Prints the execution time of the speedx function
+*/
 void speedxSpeedTest(Sample *testSample, float factor)
 {
 	if (testSample == NULL) 
@@ -59,6 +100,18 @@ void speedxSpeedTest(Sample *testSample, float factor)
 	printf("Time: %f milliseconds\n", time_diff);
 }
 
+/*
+	Name: 			void stretchSpeedTest(Sample *inputSample, float factor) 
+	
+	Description: 	Tests the speed of the stretch function from piano.c
+
+	Inputs: 		
+			Sample* 	inputSample  	The input sample waveform
+			int 		semitone		The stretching factor for the waveform
+
+	Outputs:
+			Prints the execution time of the stretch function
+*/
 void stretchSpeedTest(Sample *inputSample, float factor)
 {
 	if (inputSample == NULL)
@@ -83,6 +136,19 @@ void stretchSpeedTest(Sample *inputSample, float factor)
 	printf("Time: %f milliseconds\n", time_diff);
 }
 
+/*
+	Name: 			void superpositionSpeedTest(Sample *inputSample1, Sample *inputSample2, int offset)  
+	
+	Description: 	Tests the speed of the superposition function from piano.c
+
+	Inputs: 		
+			Sample* 	inputSample1  	The first input sample waveform
+			Sample* 	inputSample2  	The second input sample waveform
+			int 		offset			The offset that the waves will be superpositioned by
+
+	Outputs:
+			Prints the execution time of the superposition function
+*/
 void superpositionSpeedTest(Sample *inputSample1, Sample *inputSample2, int offset) 
 {
 	if (inputSample1 == NULL) 
@@ -106,7 +172,21 @@ void superpositionSpeedTest(Sample *inputSample1, Sample *inputSample2, int offs
 	printf("Time: %f milliseconds\n", time_diff);
 }
 
-void pitchshiftFrequencyTest() 
+/*
+	Name: 			void pitchshiftFrequencyTest()
+	
+	Description: 	Creates a sine wave and passes the sine wave through the pitchshifting function
+					that will double the input waveform. The output waveform will be checked to ensure 
+					that it is the double the frequency.
+
+	Inputs: 		
+			int		 	num_waveform_data_points  	The number of datapoints that the test waveform will contain
+			int 		step						The stepping rate through the waveform
+
+	Outputs:
+			Prints the frequency of the original sine wave and the frequency of the shifted sin wave
+*/
+void pitchshiftFrequencyTest(int num_waveform_data_points, int step) 
 {
     Sample *inputSample = NULL;
     Sample *outputSample = NULL;
@@ -146,126 +226,18 @@ void pitchshiftFrequencyTest()
     printf("pitchShift Sample Frequency: %i\n", frequency);
 }
 
-void stretchFFT_Timing(INT8U task_prio, Sample **inputSoundSample, Sample **outputSoundSample, float factor)
-{
+/*
+	Name: 			void pitchshiftStackUsageTest(INT8U task_prio, Sample **inputSample, Sample **outputSoundSample, int semitone)
+	
+	Description: 	Tests the speed of the pitchshift function from piano.c
 
-	if ((0.00001 - factor) <= 0.00001 && (0.00001 - factor) >= 0.00001)
-	{
-		factor = 1.0f / (pow(2.0f, (1.0f * -5 / 12.0f)));
-	}
+	Inputs: 		
+			Sample** 	inputSample  	The input sample waveform
+			int 		semitone		The number of semitones
 
-	stackTest(task_prio);
-    // Initialize the phase vector and the hanning window vector
-	float phase[WINDOW_SIZE], hanning_window[WINDOW_SIZE];
-	for (int i = 0; i < WINDOW_SIZE; ++i)
-	{
-		phase[i] = 0;
-
-		// The formular for hanning window
-		hanning_window[i] = 0.5 * (1 - cos(2 * PI * i / (WINDOW_SIZE - 1)));
-	}
-
-	// The result array
-	// (Only works using dynamic memory allocation for some unknown reason)
-	stackTest(task_prio);
-	float result[MAX_TEMP_FLOAT_ARRAY_SIZE];
-	stackTest(task_prio);
-    // The classical phase vocoder process
-    //
-    // Break the sound into overlapping bits and rearrange these bits so that
-    // they will overlap more (shortening) or less (stretching)
-	for (float step = 0; step < (*inputSoundSample)->size - (WINDOW_SIZE + H); step += H * factor)
-	{
-		// Two potentially overllaping subarrays from the input array
-		short a1[WINDOW_SIZE], a2[WINDOW_SIZE];
-
-		int index = 0;
-		for (int j = (int)step; j < (int)step + WINDOW_SIZE; ++j)
-		{
-			a1[index] = (*inputSoundSample)->data[j];
-			a2[index] = (*inputSoundSample)->data[j + H];
-			index++;
-		}
-
-		// The input and output complex arrays for FFT
-	    kiss_fft_cpx s1_in[WINDOW_SIZE], s1_out[WINDOW_SIZE],
-	    			 s2_in[WINDOW_SIZE], s2_out[WINDOW_SIZE];
-
-	    for (int i = 0; i < WINDOW_SIZE; ++i)
-	    {
-	    	s1_in[i].r = a1[i] * hanning_window[i];
-	    	s2_in[i].r = a2[i] * hanning_window[i];
-	    }
-
-	    // Resynchronize the second array on the first by taking the FFT of the
-	    // arrays and make adjustments so that they are in phase
-	    kiss_fft(cfg, s1_in, s1_out);
-	 	kiss_fft(cfg, s2_in, s2_out);
-
-	    for (int i = 0; i < WINDOW_SIZE; ++i)
-	    {
-	    	/*
-	    	  Complex division s2 / s1
-
-	    	  (s2_r + s2_i * i)   (s2_r + s2_i * i) * (s1_r - s1_i * i)
-	    	  ----------------- = -------------------------------------
-	    	  (s1_r + s1_i * i)   (s1_r + s1_i * i) * (s1_r - s1_i * i)
-
-			    (s1_r * s2_r + s1_i * s2_i) + (s1_r * s2_i - s1_i * s2_r)i
-			  = ----------------------------------------------------------
-			                         s1_r^2 + s1_i^2
-			*/
-
-	    	float res_i = s2_out[i].i * s1_out[i].r - s2_out[i].r * s1_out[i].i;
-	    	float res_r = s2_out[i].r * s1_out[i].r + s2_out[i].i * s1_out[i].i;
-
-			/*
-			  Perform arctan2(s2, s1) to get the angle in four quadrants between
-			  the two complex numbers.
-			*/
-	    	float atan_v = atan2(res_i, res_r);
-
-	    	phase[i] = fmod(phase[i] + atan_v, 2.0f * PI);
-	    }
-
-		kiss_fft_cpx a2_rephased[WINDOW_SIZE], s2_rephased[WINDOW_SIZE];
-
-		// Changes the phase of s2 to be in phase with s1
-		for (int i = 0; i < WINDOW_SIZE; ++i)
-		{
-			float abs_v = sqrt(pow(s2_out[i].r, 2) + pow(s2_out[i].i, 2));
-			s2_rephased[i].r = abs_v * cos(phase[i]);
-			s2_rephased[i].i = abs_v * sin(phase[i]);
-		}
-
-		// Perform inverse FFT to get rephased a2 in time domain
-		kiss_fft(cfg_i, s2_rephased, a2_rephased);
-
-		// Add to result
-		int i2 = (int)(step / factor);
-		for (int i = 0; i < WINDOW_SIZE; ++i)
-		{
-			result[i + i2] += hanning_window[i] * a2_rephased[i].r;
-		}
-		stackTest(task_prio);
-	}
-
-	// Find the max absolute value of the waveform
-	float max = 0;
-	for (int i = 0; i < (*outputSoundSample)->size; ++i)
-	{
-		max = fabs(result[i]) > max ? fabs(result[i]) : max;
-	}
-
-	// Normalize the waveform (16 bit)
-	for (int i = 0; i < (*outputSoundSample)->size; ++i)
-	{
-		float value = (pow(2, 12) * result[i] / max);
-		(*outputSoundSample)->data[i] = (short)value;
-	}
-	stackTest(task_prio);
-}
-
+	Outputs:
+			Execution time of the pitchshift function
+*/
 void pitchshiftStackUsageTest(INT8U task_prio, Sample **inputSample, Sample **outputSoundSample, int semitone)
 {
 
@@ -299,6 +271,18 @@ void pitchshiftStackUsageTest(INT8U task_prio, Sample **inputSample, Sample **ou
 	stackTest(task_prio);
 }
 
+/*
+	Name: 			void pitchshiftSpeedTest(Sample *inputSample, int semitone) 
+	
+	Description: 	Tests the speed of the pitchshift function from piano.c
+
+	Inputs: 		
+			Sample** 	inputSample  	The input sample waveform
+			int 		semitone		The number of semitones
+
+	Outputs:
+			Execution time of the pitchshift function
+*/
 void stackTest(INT8U task_prio)
 {
 	OS_STK_DATA data;
@@ -310,4 +294,43 @@ void stackTest(INT8U task_prio)
 	{
 		printf("Stack For Task %i: %4ld    %4ld    %4ld\n", task_prio, data.OSFree + data.OSUsed, data.OSFree, data.OSUsed);
 	}
+}
+
+/*
+	Name: 			void pitchshiftSpeedTest(Sample *inputSample, int semitone) 
+	
+	Description: 	Tests the speed of the pitchshift function from piano.c
+
+	Inputs: 		
+			Sample** 	inputSample  	The input sample waveform
+			int 		semitone		The number of semitones
+
+	Outputs:
+			Execution time of the pitchshift function
+*/
+void testSampleBasedSynthesizer() 
+{
+	Sample *samples_t1 = NULL;
+	short sampleData1[MAX_PITCH_SHIFT_OUTPUT_ARRAY_SIZE];
+	int tempIndex1 = 0;
+	int *index1 = &tempIndex1;
+	Sample *tempSample11 = sizeOfSound(1, index1);
+	samples_t1 = &(Sample) { .size = tempSample11->size, .data = sampleData1 };
+	pitchshiftStackUsageTest(GENERATE_SOUND_TASK_PRIO, &tempSample11, &samples_t1, -5);
+	pitchshiftSpeedTest(NULL, -10);
+	speedxSpeedTest(NULL, 0);
+	stretchSpeedTest(NULL, 0);
+	superpositionSpeedTest(NULL, NULL, 0);
+	pitchshiftFrequencyTest();
+
+	stretchFFT_Timing(GENERATE_SOUND_TASK_PRIO, &tempSample11, &samples_t1, 0);
+
+	os_err = OSTaskStkChk(GENERATE_SOUND_TASK_PRIO, &data);
+
+	if (os_err == OS_ERR_NONE)
+	{
+		printf("%4ld    %4ld    %4ld\n", data.OSFree + data.OSUsed, data.OSFree, data.OSUsed);
+	}
+
+	int i = 0, i_s= 1;
 }

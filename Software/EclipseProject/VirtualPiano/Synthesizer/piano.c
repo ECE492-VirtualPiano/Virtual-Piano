@@ -50,7 +50,7 @@ void destroyFFT()
 
 	Inputs: 		
 			Sample** 	inputSoundSample  The address of the input sample waveform
-			int 		n 				The number of semitones
+			int 		num_semitones	  The number of semitones
 
 	Outputs:
 			Sample**	outputSoundSample 		The address of the output sample waveform

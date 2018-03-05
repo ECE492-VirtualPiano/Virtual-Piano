@@ -78,6 +78,7 @@
 // Audio Synthesizer Libraries
 #include  "../Audio/audio.h"
 #include  "../Synthesizer/piano.h"
+#include  "../Testbenches/SampleBasedSynthesizerTest.h"
 
 // Video Processing Libraries
 #include  <ucos_ii.h>
@@ -85,7 +86,6 @@
 #include  <stdlib.h>
 #include  <string.h>
 #include "../Video/video.h"
-
 
 // Compute absolute address of any slave component attached to lightweight bridge
 // base is address of component in QSYS window
@@ -391,38 +391,11 @@ static  void  GenerateSoundTask (void *p_arg)
 	// Audio Base
 	volatile int * audio_ptr = (int *) AUDIO_BASE;
 
-	// Testing
-	/*
-		Sample *samples_t1 = NULL;
-		short sampleData1[MAX_PITCH_SHIFT_OUTPUT_ARRAY_SIZE];
-		int tempIndex1 = 0;
-		int *index1 = &tempIndex1;
-		Sample *tempSample11 = sizeOfSound(1, index1);
-		samples_t1 = &(Sample) { .size = tempSample11->size, .data = sampleData1 };
-		pitchshiftStackUsageTest(GENERATE_SOUND_TASK_PRIO, &tempSample11, &samples_t1, -5);
-		pitchshiftSpeedTest(NULL, -10);
-		speedxSpeedTest(NULL, 0);
-		stretchSpeedTest(NULL, 0);
-		superpositionSpeedTest(NULL, NULL, 0);
-		pitchshiftFrequencyTest();
-
-		stretchFFT_Timing(GENERATE_SOUND_TASK_PRIO, &tempSample11, &samples_t1, 0);
-
-		os_err = OSTaskStkChk(GENERATE_SOUND_TASK_PRIO, &data);
-
-		if (os_err == OS_ERR_NONE)
-		{
-			printf("%4ld    %4ld    %4ld\n", data.OSFree + data.OSUsed, data.OSFree, data.OSUsed);
-		}
-
-		int i = 0, i_s= 1;
-	*/
-
 	// Looping variables
     int i = 0, i_s= 1;
 
     // Struct Sample initalization
-	Sample *samples_t = NULL;
+	Sample *samples_t = NULL;	
 
 	// Loop Forever
     for(;;) {
