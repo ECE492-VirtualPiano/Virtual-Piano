@@ -1,3 +1,23 @@
+/*
+*********************************************************************************************************
+*
+*                             SAMPLE-BASED SYNTHESIZER TESTBENCH  HEADER CODE
+*
+*                                            CYCLONE V SOC
+*
+* Filename      : SampleBasedSynthesizerTest.h
+* Version       : V1.00
+* Programmer(s) : Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
+* References    : 
+*
+*********************************************************************************************************
+* Note(s)       : This file is used to test the functionality of the sample-based synthesizer code.
+				  The functions in this testbench test the speed of each of the core functions in the 
+				  synthesizer, as well as provides inside information on the state of the stack before 
+				  and after function execution.
+*********************************************************************************************************
+*/
+
 #include  <time.h>
 #include  "../Synthesizer/piano.h"
 
