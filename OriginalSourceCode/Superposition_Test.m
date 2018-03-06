@@ -8,7 +8,7 @@
 * Filename      : Superposition_Test.m
 * Version       : V1.00
 * Creation 		: January 28, 2018
-* Created by 	: Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
+* Created by 	: Kevin Wong (kwong4@ualberta.ca)
 *********************************************************************************************************
 * Note(s)       : This file shows how sounds of different frequencies can be played in Matlab, and also 
                   shows how sounds can be superpositioned together and what that sounds like. This provides 
