@@ -24,23 +24,23 @@
 *
 *                                            CYCLONE V SOC
 *
-* Filename      : app.c
-* Version       : V1.00
-* Programmer(s) : JBL
-* Modifications	: Nancy Minderman nancy.minderman@ualberta.ca, Brendan Bruner bbruner@ualberta.ca
-* 				  Changes to this project include scatter file changes and BSP changes for port from
-* 				  Cyclone V dev kit board to DE1-SoC
+* Filename      			: app.c
+* Version       			: V1.00
+* Programmer(s) 			: JBL
+* Modifications				: Nancy Minderman nancy.minderman@ualberta.ca, Brendan Bruner bbruner@ualberta.ca
+* 				  			  Changes to this project include scatter file changes and BSP changes for port from
+* 				  			  Cyclone V dev kit board to DE1-SoC
 *
-* 				  Group 7: Kevin Wong, Mingjun Zhao, Daniel Tran, and Alvin Huang.
-* 				  Changes to this project include referenced and modified code from:
-* 				  		Title: "VGA display of video input using a bus_master to copy input image"
-* 				  		Original Author: Bruce Land (bruce.land@cornell.edu)
-* 				  		Date accessed: Feb 2, 2018
-* 				  		Used with Permission from Author
-* 				  		http://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/Bus_master_slave_index.html
-* Creation/Reference Date: Feb 2, 2018
-* Modified By: Alvin Huang (aehuang@ualberta.ca), Kevin Wong (kwong4@ualberta.ca), 
-			   Daniel Tran (dtran3@ualberta.ca), Mingjun Zhao (zhao2@ualberta.ca)
+* 				  			  Group 7: Kevin Wong, Mingjun Zhao, Daniel Tran, and Alvin Huang.
+* 				  			  Changes to this project include referenced and modified code from:
+* 				  					Title: "VGA display of video input using a bus_master to copy input image"
+* 				  					Original Author: Bruce Land (bruce.land@cornell.edu)
+* 				  					Date accessed: Feb 2, 2018
+* 				  					Used with Permission from Author
+* 				  					http://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/Bus_master_slave_index.html
+* Creation/Reference Date 	: Feb 2, 2018
+* Modified By			 	: Alvin Huang (aehuang@ualberta.ca), Kevin Wong (kwong4@ualberta.ca), 
+							  Daniel Tran (dtran3@ualberta.ca), Mingjun Zhao (zhao2@ualberta.ca)
 *********************************************************************************************************
 * Note(s)       : Main program
 *

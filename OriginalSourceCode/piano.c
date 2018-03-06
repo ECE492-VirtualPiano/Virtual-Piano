@@ -12,8 +12,8 @@
 * 				  		Original Author: Zulko
 * 				  		Date accessed: Jan 31, 2018
 * 				  		https://github.com/Zulko/pianoputer
-* Creation: January 30, 2018
-* Created by: Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
+* Creation 		: January 30, 2018
+* Created by 	: Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
 *********************************************************************************************************
 * Note(s)       : This file is mainly a sample based piano synthesizer which takes
 				  in a sample piano sound waveform (Middle C) and transforms it into

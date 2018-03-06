@@ -5,16 +5,16 @@
 *
 *                                            CYCLONE V SOC
 *
-* Filename      : video.c
-* Version       : V1.00
-* References    : Changes to this project include referenced and modified code from:
-* 				  		Title: "VGA display of video input using a bus_master to copy input image"
-* 				  		Original Author: Bruce Land (bruce.land@cornell.edu)
-* 				  		Date accessed: Feb 2, 2018
-* 				  		Used with Permission from Author
-* 				  		http://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/Bus_master_slave_index.html
+* Filename     			 : video.c
+* Version      			 : V1.00
+* References    		 : Changes to this project include referenced and modified code from:
+* 				  				Title: "VGA display of video input using a bus_master to copy input image"
+* 				  				Original Author: Bruce Land (bruce.land@cornell.edu)
+* 				  				Date accessed: Feb 2, 2018
+* 				  				Used with Permission from Author
+* 				  				http://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/Bus_master_slave_index.html
 * Creation/Reference Date: Feb 2, 2018
-* Modified By: Alvin Huang (aehuang@ualberta.ca), Kevin Wong (kwong4@ualberta.ca)
+* Modified By			 : Alvin Huang (aehuang@ualberta.ca), Kevin Wong (kwong4@ualberta.ca)
 *********************************************************************************************************
 * Note(s)       : This is a Video and VGA driver for the Altera University IP "VGA Controller" and "Video-In Decoder",
 * 				  for use with the DE1-SoC.  This code was referenced from Bruce Land's "VGA display of video input using

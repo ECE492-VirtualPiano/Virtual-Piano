@@ -7,9 +7,8 @@
 *
 * Filename      : wav_output_test.py
 * Version       : V1.00
-* References    : 
-* Creation: February 5, 2018
-* Created by: Mingjun Zhao (zhao2@ualberta.ca), Daniel Tran (dtran3@ualberta.ca)
+* Creation 		: February 5, 2018
+* Created by 	: Mingjun Zhao (zhao2@ualberta.ca), Daniel Tran (dtran3@ualberta.ca)
 *********************************************************************************************************
 * Note(s)       : This code is used to test the output wave files produced from the referenced python 
 				  code and our implementation of the sample based synthesizer. The two output files are 

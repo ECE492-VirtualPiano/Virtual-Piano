@@ -7,9 +7,8 @@
 *
 * Filename      : SampleBasedSynthesizerTest.c
 * Version       : V1.00
-* References    : 
-* Creation: February 26, 2018
-* Created by: Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
+* Creation 		: February 26, 2018
+* Created by 	: Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
 *********************************************************************************************************
 * Note(s)       : This file is used to test the functionality of the sample-based synthesizer code.
 				  The functions in this testbench test the speed of each of the core functions in the 

@@ -7,9 +7,8 @@
 *
 * Filename      : image_proc.py
 * Version       : V1.00
-* References    : 
-* Creation: February 17, 2018
-* Created by: Mingjun Zhao (zhao2@ualberta.ca)
+* Creation 		: February 17, 2018
+* Created by 	: Mingjun Zhao (zhao2@ualberta.ca)
 *********************************************************************************************************
 * Note(s)       : This code is python throw away code that will be ported into ucos-ii in the future. 
 *				  The functionality of the code provides the ability to convert a jpg image into hsv, hsl, 
