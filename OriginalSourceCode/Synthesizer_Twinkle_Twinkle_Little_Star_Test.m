@@ -8,7 +8,7 @@
 * Filename      : Superposition_Test.m
 * Version       : V1.00
 * Creation 		: January 28, 2018
-* Created by 	: Kevin Wong (kwong4@ualberta.ca)
+* Created by 	: Kevin Wong (kwong4@ualberta.ca), Mingjun Zhao (zhao2@ualberta.ca), Daniel Tran (dtran3@ualberta.ca)
 *********************************************************************************************************
 * Note(s)       : This file is an example of what a simple song would sound like by using the same 
                   frequencies as those for a piano. The sounds are created as sine waves and played with 
