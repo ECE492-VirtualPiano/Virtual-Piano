@@ -331,12 +331,12 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 	Description: 	Generate a sound sample of the given index
 
 	Inputs:
-			int 		index 			The index of the piano key (1 to 88)
+			int 		pianoKeyIndex 			The index of the piano key (1 to 88)
+			int * 		octaveKeyIndex			The key number within the octave
 
 	Outputs:
-			Sample**	samples_t 		The address of the output sample waveform
+			Sample* 	A sample waveform
 */
-
 Sample *sizeOfSound(int pianoKeyIndex, int *octaveKeyIndex)
 {
 	// Generate the sound from the closest prerecorded sample
@@ -383,6 +383,17 @@ Sample *sizeOfSound(int pianoKeyIndex, int *octaveKeyIndex)
 	return NULL;
 }
 
+/*
+	Name: 			void generateSound(int pianoKeyIndex, Sample **outputSoundSample)
+
+	Description: 	Generate a sound sample of the given index
+
+	Inputs:
+			int 		pianoKeyIndex		The index of the piano key (1 to 88)
+
+	Outputs:
+			Sample**	outputSoundSample 	The address of the output sample waveform
+*/
 void generateSound(int pianoKeyIndex, Sample **outputSoundSample)
 {
 	if (pianoKeyIndex >= C1_LOW && pianoKeyIndex <= C1_HIGH)
