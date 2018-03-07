@@ -20,8 +20,6 @@
 #include "SampleBasedSynthesizerTest.h"
 
 kiss_fft_cfg cfg, cfg_i;
-
-
 /*
 	Name: 			void pitchshiftSpeedTest(Sample *inputSample, int semitone) 
 	
@@ -235,7 +233,7 @@ void superpositionSpeedTest(Sample *inputSample1, Sample *inputSample2, int offs
 	Outputs:
 			Prints the frequency of the original sine wave and the frequency of the shifted sin wave
 */
-void pitchshiftFrequencyTest(int num_waveform_data_points, int step, short amplitude) 
+void pitchshiftFrequencyTest(int num_waveform_data_points, float step, short amplitude)
 {
 	// Initialize the input and output sample variables
     Sample *inputSample = NULL;
@@ -273,7 +271,7 @@ void pitchshiftFrequencyTest(int num_waveform_data_points, int step, short ampli
 
 		// Check if there is a transition from positive to negative on the curve, if so increase
 		// the frequency
-		if (sinData->data[i-1] >= 0 && sinData->data[i] < 0)
+		if (sinData[i-1] >= 0 && sinData[i] < 0)
         {
             generated_frequency++;
         }
@@ -296,13 +294,13 @@ void pitchshiftFrequencyTest(int num_waveform_data_points, int step, short ampli
             frequency++;
         }
     }
-	if (generated_frequency == frequency) 
+	if (frequency == 2*generated_frequency)
 	{
-		printf("PASS: The pitchShift frequency is double the original sample frequency");
+		printf("PASS: The pitchShift frequency is double the original sample frequency\n");
 	}
 	else
 	{
-		printf("FAIL: The pitchShift frequency is not double the original sample frequency");
+		printf("FAIL: The pitchShift frequency is not double the original sample frequency\n");
 	}
 
     printf("Original Sample Frequency: %i\n", generated_frequency);
@@ -390,23 +388,26 @@ void stackTest(INT8U task_prio)
 }
 
 /*
-	Name: 			void testSampleBasedSynthesizer() 
+	Name: 			void testSampleBasedSynthesizer(int task_prio)
 	
 	Description: 	Contains all of the tests above in one function
+
+	Inputs:
+			INT8U 		task_prio		The priority of the task in which the stack will be checked
 */
-void testSampleBasedSynthesizer() 
+void testSampleBasedSynthesizer(INT8U task_prio)
 {
 	// Initialize a sample to contain the transformed sample
 	Sample *samples_t = NULL;
-	short sampleData1[MAX_PITCH_SHIFT_OUTPUT_ARRAY_SIZE];
+	short sampleData[MAX_PITCH_SHIFT_OUTPUT_ARRAY_SIZE];
 	// Get a sample sound wave and its index
 	int tempIndex = 0;
 	int *index = &tempIndex;
-	Sample *tempSample = sizeOfSound(1, index1);
+	Sample *tempSample = sizeOfSound(1, index);
 	samples_t = &(Sample) { .size = tempSample->size, .data = sampleData };
 
 	// Test the stack usage for the pitchshift function
-	pitchshiftStackUsageTest(GENERATE_SOUND_TASK_PRIO, &tempSample, &samples_t, -5);
+	pitchshiftStackUsageTest(task_prio, &tempSample, &samples_t, -5);
 	
 	// Test the runtime of the pitchshift function
 	pitchshiftSpeedTest(NULL, -5);

@@ -25,8 +25,6 @@
 
 #include "piano.h"
 
-kiss_fft_cfg cfg, cfg_i;
-
 void initFFT()
 {
 	if((cfg = kiss_fft_alloc(WINDOW_SIZE, 0, NULL, NULL)) == NULL ||
@@ -72,16 +70,6 @@ void pitchshift(Sample **inputSoundSample, Sample **outputSoundSample, int num_s
 	stretch(inputSoundSample, &stretchedInputSample, 1.0f / factor);
 
 	// A temporary Sample variable to hold a part of the wave of 'stretched'
-
-//	int sizeOfTempSample = sizeOfSample - WINDOW_SIZE;
-//	short tempSamplesData[sizeOfTempSample];
-//	Sample *tempsamples_t = &(Sample) { .size = sizeOfTempSample, .data = tempSamplesData };
-//
-//
-//	for (int i = 0; i < tempsamples_t->size; ++i)
-//	{
-//		tempsamples_t->data[i] = stretched->data[i + WINDOW_SIZE];
-//	}
 
 	// Change the frequency and the length of the wave by the factor
 	// The wave after change will have the same length as the template wave
@@ -244,7 +232,6 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 				index++;
 			}
 			else {
-				printf("ERROR ERROR ERROR ERROR ERROR ERROR\n");
 				break;
 			}
 		}
@@ -313,7 +300,6 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 			}
 			else 
 			{
-				printf("ERROR ERROR ERROR ERROR ERROR ERROR\n");
 				break;
 			}
 		}
@@ -329,7 +315,6 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 		}
 		else 
 		{
-			printf("ERROR ERROR ERROR ERROR ERROR ERROR\n");
 			break;
 		}
 	}
@@ -344,7 +329,6 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 		}
 		else 
 		{
-			printf("ERROR ERROR ERROR ERROR ERROR ERROR\n");
 			break;
 		}
 	}

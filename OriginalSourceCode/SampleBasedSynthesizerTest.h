@@ -22,12 +22,11 @@
 
 #include  <os.h>
 
-kiss_fft_cfg cfg, cfg_i;
-
 void pitchshiftSpeedTest(Sample *inputSample, int semitone);
 void speedxSpeedTest(Sample *testSample, float factor);
 void stretchSpeedTest(Sample *inputSample, float factor);
 void superpositionSpeedTest(Sample *inputSample1, Sample *inputSample2, int offset);
-void pitchshiftFrequencyTest();
+void pitchshiftFrequencyTest(int num_waveform_data_points, float step, short amplitude);
 void pitchshiftStackUsageTest(INT8U task_prio, Sample **inputSample, Sample **outputSoundSample, int semitone);
 void stackTest(INT8U task_prio);
+void testSampleBasedSynthesizer(INT8U task_prio);

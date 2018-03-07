@@ -62,6 +62,8 @@
 #define MAX_PITCH_SHIFT_OUTPUT_ARRAY_SIZE 210000
 #define MAX_TEMP_FLOAT_ARRAY_SIZE 300000
 
+extern kiss_fft_cfg cfg, cfg_i;
+
 typedef struct {
     short  *data;
     int     size;

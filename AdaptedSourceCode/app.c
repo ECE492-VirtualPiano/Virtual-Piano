@@ -79,7 +79,6 @@
 
 // Audio Synthesizer Libraries
 #include  "../Audio/audio.h"
-#include  "../Synthesizer/piano.h"
 #include  "../Testbenches/SampleBasedSynthesizerTest.h"
 
 // Video Processing Libraries
@@ -236,19 +235,19 @@ int main ()
 
 	// Create the Audio task.
 	// Generates the Audio
-//    os_err = OSTaskCreateExt((void (*)(void *)) GenerateSoundTask,
-//                                 (void          * ) 0,
-//                                 (OS_STK        * )&GenerateSoundTaskStk[AUDIO_TASK_STACK_SIZE - 1],
-//                                 (INT8U           ) GENERATE_SOUND_TASK_PRIO,
-//                                 (INT16U          ) GENERATE_SOUND_TASK_PRIO,
-//                                 (OS_STK        * )&GenerateSoundTaskStk[0],
-//                                 (INT32U          ) AUDIO_TASK_STACK_SIZE,
-//                                 (void          * )0,
-//                                 (INT16U          )(OS_TASK_OPT_STK_CLR | OS_TASK_OPT_STK_CHK));
-//
-//	if (os_err != OS_ERR_NONE) {
-//		exit(0); /* Handle error. */
-//	}
+    os_err = OSTaskCreateExt((void (*)(void *)) GenerateSoundTask,
+                                 (void          * ) 0,
+                                 (OS_STK        * )&GenerateSoundTaskStk[AUDIO_TASK_STACK_SIZE - 1],
+                                 (INT8U           ) GENERATE_SOUND_TASK_PRIO,
+                                 (INT16U          ) GENERATE_SOUND_TASK_PRIO,
+                                 (OS_STK        * )&GenerateSoundTaskStk[0],
+                                 (INT32U          ) AUDIO_TASK_STACK_SIZE,
+                                 (void          * )0,
+                                 (INT16U          )(OS_TASK_OPT_STK_CLR | OS_TASK_OPT_STK_CHK));
+
+	if (os_err != OS_ERR_NONE) {
+		exit(0); /* Handle error. */
+	}
 
 	// CPU Initalize/Config
 	CPU_IntEn();
@@ -398,6 +397,8 @@ static  void  GenerateSoundTask (void *p_arg)
 
     // Struct Sample initalization
 	Sample *samples_t = NULL;	
+
+	testSampleBasedSynthesizer(GENERATE_SOUND_TASK_PRIO);
 
 	// Loop Forever
     for(;;) {
