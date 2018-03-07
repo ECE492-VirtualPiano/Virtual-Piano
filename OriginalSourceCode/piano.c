@@ -332,51 +332,68 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 
 	Inputs:
 			int 		pianoKeyIndex 			The index of the piano key (1 to 88)
-			int * 		octaveKeyIndex			The key number within the octave
 
 	Outputs:
 			Sample* 	A sample waveform
+			int * 		octaveKeyIndex			The key number within the octave
 */
 Sample *sizeOfSound(int pianoKeyIndex, int *octaveKeyIndex)
 {
 	// Generate the sound from the closest prerecorded sample
+
+	// For a sample closest to Sample C1
 	if (pianoKeyIndex >= C1_LOW && pianoKeyIndex <= C1_HIGH)
 	{
+		// Get the key number in the first octave
 		*octaveKeyIndex = pianoKeyIndex - C1;
 		return SAMPLE_C1;
 	}
+	// For a sample closest to Sample C2
 	else if (pianoKeyIndex >= C2_LOW && pianoKeyIndex <= C2_HIGH)
 	{
+		// Get the key number in the second octave
 		*octaveKeyIndex = pianoKeyIndex - C2;
 		return SAMPLE_C2;
 	}
+	// For a sample closest to Sample C3
 	else if (pianoKeyIndex >= C3_LOW && pianoKeyIndex <= C3_HIGH)
 	{
+		// Get the key number in the third octave
 		*octaveKeyIndex = pianoKeyIndex - C3;
 		return SAMPLE_C3;
 	}
+	// For a sample closest to Sample C4
 	else if (pianoKeyIndex >= C4_LOW && pianoKeyIndex <= C4_HIGH)
 	{
+		// Get the key number in the fourth octave
 		*octaveKeyIndex = pianoKeyIndex - C4;
 		return SAMPLE_C4;
 	}
+	// For a sample closest to Sample C5
 	else if (pianoKeyIndex >= C5_LOW && pianoKeyIndex <= C5_HIGH)
 	{
+		// Get the key number in the fifth octave
 		*octaveKeyIndex = pianoKeyIndex - C5;
 		return SAMPLE_C5;
 	}
+	// For a sample closest to Sample C6
 	else if (pianoKeyIndex >= C6_LOW && pianoKeyIndex <= C6_HIGH)
 	{
+		// Get the key number in the sixth octave
 		*octaveKeyIndex = pianoKeyIndex - C6;
 		return SAMPLE_C6;
 	}
+	// For a sample closest to Sample C7
 	else if (pianoKeyIndex >= C7_LOW && pianoKeyIndex <= C7_HIGH)
 	{
+		// Get the key number in the seventh octave
 		*octaveKeyIndex = pianoKeyIndex - C7;
 		return SAMPLE_C7;
 	}
+	// For a sample closest to Sample C8
 	else if (pianoKeyIndex >= C8_LOW && pianoKeyIndex <= C8_HIGH)
 	{
+		// Get the key number in the eighth octave
 		*octaveKeyIndex = pianoKeyIndex - C8;
 		return SAMPLE_C8;
 	}
@@ -396,34 +413,42 @@ Sample *sizeOfSound(int pianoKeyIndex, int *octaveKeyIndex)
 */
 void generateSound(int pianoKeyIndex, Sample **outputSoundSample)
 {
+	// Perform pitch shift on the Sample C1
 	if (pianoKeyIndex >= C1_LOW && pianoKeyIndex <= C1_HIGH)
 	{
 		pitchshift(&SAMPLE_C1, outputSoundSample, pianoKeyIndex - C1);
 	}
+	// Perform pitch shift on the Sample C2
 	else if (pianoKeyIndex >= C2_LOW && pianoKeyIndex <= C2_HIGH)
 	{
 		pitchshift(&SAMPLE_C2, outputSoundSample, pianoKeyIndex - C2);
 	}
+	// Perform pitch shift on the Sample C3
 	else if (pianoKeyIndex >= C3_LOW && pianoKeyIndex <= C3_HIGH)
 	{
 		pitchshift(&SAMPLE_C3, outputSoundSample, pianoKeyIndex - C3);
 	}
+	// Perform pitch shift on the Sample C4
 	else if (pianoKeyIndex >= C4_LOW && pianoKeyIndex <= C4_HIGH)
 	{
 		pitchshift(&SAMPLE_C4, outputSoundSample, pianoKeyIndex - C4);
 	}
+	// Perform pitch shift on the Sample C5
 	else if (pianoKeyIndex >= C5_LOW && pianoKeyIndex <= C5_HIGH)
 	{
 		pitchshift(&SAMPLE_C5, outputSoundSample, pianoKeyIndex - C5);
 	}
+	// Perform pitch shift on the Sample C6
 	else if (pianoKeyIndex >= C6_LOW && pianoKeyIndex <= C6_HIGH)
 	{
 		pitchshift(&SAMPLE_C6, outputSoundSample, pianoKeyIndex - C6);
 	}
+	// Perform pitch shift on the Sample C7
 	else if (pianoKeyIndex >= C7_LOW && pianoKeyIndex <= C7_HIGH)
 	{
 		pitchshift(&SAMPLE_C7, outputSoundSample, pianoKeyIndex - C7);
 	}
+	// Perform pitch shift on the Sample C8
 	else if (pianoKeyIndex >= C8_LOW && pianoKeyIndex <= C8_HIGH)
 	{
 		pitchshift(&SAMPLE_C8, outputSoundSample, pianoKeyIndex - C8);
