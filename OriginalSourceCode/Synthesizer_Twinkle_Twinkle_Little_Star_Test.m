@@ -5,7 +5,7 @@
 *
 *                                         CYCLONE V SOC
 *
-* Filename      : Superposition_Test.m
+* Filename      : Synthesizer_Twinkle_Twinkle_Little_Start_Test.m
 * Version       : V1.00
 * Creation 		: January 28, 2018
 * Created by 	: Kevin Wong (kwong4@ualberta.ca), Mingjun Zhao (zhao2@ualberta.ca), Daniel Tran (dtran3@ualberta.ca)
