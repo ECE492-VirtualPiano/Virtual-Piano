@@ -91,13 +91,6 @@ void pitchshift(Sample **inputSoundSample, Sample **outputSoundSample, int num_s
 */
 void speedx(Sample **inputSoundSample, Sample **outputSoundSample, float factor)
 {
-//
-//
-//	// Allocate the memory for the output Sample wave
-//	*samples_t = (Sample*)malloc(sizeof(Sample));
-//	(*samples_t)->size = (*samples)->size / factor;
-//	(*samples_t)->data = (short*)calloc((*samples_t)->size, sizeof(short));
-
 	// The index of output data array
 	int res_i = 0;
 
@@ -209,8 +202,6 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 	}
 
 	// The result array
-	// (Only works using dynamic memory allocation for some unknown reason)
-
 	float result[MAX_TEMP_FLOAT_ARRAY_SIZE];
 
     // The classical phase vocoder process
@@ -332,17 +323,6 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 			break;
 		}
 	}
-}
-
-
-/*
-	Name: 			void pitchshiftTest()
-	
-	Description: 	Output a transformed waveform for testing
-*/ 
-void pitchshiftTest()
-{
-	// Print the information of the wav file read
 }
 
 /*
