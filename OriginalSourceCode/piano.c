@@ -7,13 +7,13 @@
 *
 * Filename      : piano.c
 * Version       : V1.00
-* References    : Changes to this project include reference to:
+* Programmer(s) : Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
+* References    : Changes to this project include referenced and modified code from:
 * 				  		Title: "Pianoputer"
 * 				  		Original Author: Zulko
 * 				  		Date accessed: Jan 31, 2018
 * 				  		https://github.com/Zulko/pianoputer
-* Creation 		: January 30, 2018
-* Created by 	: Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
+*
 *********************************************************************************************************
 * Note(s)       : This file is mainly a sample based piano synthesizer which takes
 				  in a sample piano sound waveform (Middle C) and transforms it into
@@ -25,30 +25,42 @@
 
 #include "piano.h"
 
+
+kiss_fft_cfg CFG, CFG_I;
+
+/*
+	Name: 			void initFFT(void)
+
+	Description: 	Initialize the settings for FFT and inverse FFT
+*/
 void initFFT()
 {
-	if((cfg = kiss_fft_alloc(WINDOW_SIZE, 0, NULL, NULL)) == NULL ||
-	   (cfg_i = kiss_fft_alloc(WINDOW_SIZE, 1, NULL, NULL)) == NULL)
+	if((CFG = kiss_fft_alloc(WINDOW_SIZE, 0, NULL, NULL)) == NULL ||
+	   (CFG_I = kiss_fft_alloc(WINDOW_SIZE, 1, NULL, NULL)) == NULL)
 	{
-		printf("not enough memory?\n");
 		exit(-1);
 	}
 }
 
+/*
+	Name: 			void initFFT(void)
+
+	Description: 	Free the memory of the settings for FFT and inverse FFT
+*/
 void destroyFFT()
 {
-	free(cfg);
-	free(cfg_i);
+	free(CFG);
+	free(CFG_I);
 }
 
 /*
-	Name: 			void pitchshift(samples, samples_t, n)
+	Name: 			void pitchshift(inputSoundSample, outputSoundSample, num_semitones)
 	
 	Description: 	Changes the pitch of a sound by "n" semitones.
 
 	Inputs: 		
-			Sample** 	inputSoundSample  The address of the input sample waveform
-			int 		num_semitones	  The number of semitones
+			Sample** 	inputSoundSample  		The address of the input sample waveform
+			int 		num_semitones			The number of semitones
 
 	Outputs:
 			Sample**	outputSoundSample 		The address of the output sample waveform
@@ -69,8 +81,6 @@ void pitchshift(Sample **inputSoundSample, Sample **outputSoundSample, int num_s
 	// Stretch the wave by the reciprocal of the factor
 	stretch(inputSoundSample, &stretchedInputSample, 1.0f / factor);
 
-	// A temporary Sample variable to hold a part of the wave of 'stretched'
-
 	// Change the frequency and the length of the wave by the factor
 	// The wave after change will have the same length as the template wave
 	speedx(&stretchedInputSample, outputSoundSample, factor);
@@ -78,16 +88,16 @@ void pitchshift(Sample **inputSoundSample, Sample **outputSoundSample, int num_s
 
 
 /*
-	Name: 			void speedx(samples, samples_t, factor)
+	Name: 			void speedx(inputSoundSample, outputSoundSample, factor)
 	
 	Description: 	Speeds up / slows down a sound, by given factor
 
 	Inputs: 		
-			Sample** 	samples 		The address of the input sample waveform 
-			int 		factor  		The factor of speed
+			Sample** 	inputSoundSample 		The address of the input sample waveform
+			float 		factor  				The factor of speed
 
 	Outputs:
-			Sample**	samples_t 		The address of the output sample waveform 
+			Sample**	outputSoundSample 		The address of the output sample waveform
 */
 void speedx(Sample **inputSoundSample, Sample **outputSoundSample, float factor)
 {
@@ -125,18 +135,18 @@ void speedx(Sample **inputSoundSample, Sample **outputSoundSample, float factor)
 
 
 /*
-	Name: 			void superposition(samples1, samples2, samples_t, offset)
+	Name: 			void superposition(inputSoundSample1, inputSoundSample2, outputSoundSample, offset)
 	
 	Description: 	Combine two input sample waveforms with a given offset into a 
 					new waveform
 
 	Inputs: 		
-			Sample** 	samples1 		The address of the first input waveform 
-			Sample** 	samples2 		The address of the second input waveform 
-			int 		offset  		The start offset of the second waveform
+			Sample** 	inputSoundSample1 		The address of the first input waveform
+			Sample** 	inputSoundSample2 		The address of the second input waveform
+			int 		offset  				The start offset of the second waveform
 
 	Outputs:
-			Sample**	samples_t 		The address of the output sample waveform 
+			Sample**	outputSoundSample 		The address of the output sample waveform
 */
 void superposition(Sample **inputSoundSample1, Sample **inputSoundSample2, Sample **outputSoundSample, int offset)
 {
@@ -176,18 +186,16 @@ void superposition(Sample **inputSoundSample1, Sample **inputSoundSample2, Sampl
 
 
 /*
-	Name: 			void stretch(samples, samples_t, factor, WINDOW_SIZE, h)
+	Name: 			void stretch(inputSoundSample, outputSoundSample, factor)
 	
 	Description: 	Stretches / shortens a sound wave, by given factor
 
 	Inputs: 		
-			Sample** 	samples 		The address of the input waveform 
-			float 		factor  		The stretch factor
-			int 		WINDOW_SIZE		The window size used in FFT
-			int 		h 				The h factor
+			Sample** 	inputSoundSample 		The address of the input waveform
+			float 		factor  				The stretch factor
 
 	Outputs:
-			Sample**	samples_t 		The address of the output sample waveform 
+			Sample**	outputSoundSample 		The address of the output sample waveform
 */
 void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor)
 {
@@ -239,8 +247,8 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 
 	    // Resynchronize the second array on the first by taking the FFT of the 
 	    // arrays and make adjustments so that they are in phase
-	    kiss_fft(cfg, s1_in, s1_out);
-	 	kiss_fft(cfg, s2_in, s2_out);
+	    kiss_fft(CFG, s1_in, s1_out);
+	 	kiss_fft(CFG, s2_in, s2_out);
 
 	    for (int i = 0; i < WINDOW_SIZE; ++i)
 	    {
@@ -262,7 +270,7 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 			/*
 			  Perform arctan2(s2, s1) to get the angle in four quadrants between
 			  the two complex numbers. 
-			*/	    	
+			*/
 	    	float atan_v = atan2(res_i, res_r);
 
 	    	phase[i] = fmod(phase[i] + atan_v, 2.0f * PI);
@@ -279,7 +287,7 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 		}
 
 		// Perform inverse FFT to get rephased a2 in time domain
-		kiss_fft(cfg_i, s2_rephased, a2_rephased);
+		kiss_fft(CFG_I, s2_rephased, a2_rephased);
 
 		// Add to result
 		int i2 = (int)(step / factor);
@@ -326,131 +334,89 @@ void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor
 }
 
 /*
-	Name: 			void generateSound(index, samples_t)
+	Name: 			Sample *sizeOfSound(pianoKeyIndex, octaveKeyIndex)
 
-	Description: 	Generate a sound sample of the given index
+	Description: 	Return the template sample for the note to be generated and
+					pass by reference the relative semitone difference between
+					the note and the template sample.
 
 	Inputs:
-			int 		pianoKeyIndex 			The index of the piano key (1 to 88)
+			int 		pianoKeyIndex 	The index of the piano key (1 to 61)
 
 	Outputs:
-			Sample* 	A sample waveform
-			int * 		octaveKeyIndex			The key number within the octave
+			int * 		octaveKeyIndex  The relative semitone difference
+			Sample**	templateSample	The address of the template sample waveform
 */
 Sample *sizeOfSound(int pianoKeyIndex, int *octaveKeyIndex)
 {
-	// Generate the sound from the closest prerecorded sample
-
-	// For a sample closest to Sample C1
-	if (pianoKeyIndex >= C1_LOW && pianoKeyIndex <= C1_HIGH)
+	if (pianoKeyIndex >= C2_LOW && pianoKeyIndex <= C2_HIGH)
 	{
-		// Get the key number in the first octave
-		*octaveKeyIndex = pianoKeyIndex - C1;
-		return SAMPLE_C1;
-	}
-	// For a sample closest to Sample C2
-	else if (pianoKeyIndex >= C2_LOW && pianoKeyIndex <= C2_HIGH)
-	{
-		// Get the key number in the second octave
 		*octaveKeyIndex = pianoKeyIndex - C2;
 		return SAMPLE_C2;
 	}
-	// For a sample closest to Sample C3
 	else if (pianoKeyIndex >= C3_LOW && pianoKeyIndex <= C3_HIGH)
 	{
-		// Get the key number in the third octave
 		*octaveKeyIndex = pianoKeyIndex - C3;
 		return SAMPLE_C3;
 	}
-	// For a sample closest to Sample C4
 	else if (pianoKeyIndex >= C4_LOW && pianoKeyIndex <= C4_HIGH)
 	{
-		// Get the key number in the fourth octave
 		*octaveKeyIndex = pianoKeyIndex - C4;
 		return SAMPLE_C4;
 	}
-	// For a sample closest to Sample C5
 	else if (pianoKeyIndex >= C5_LOW && pianoKeyIndex <= C5_HIGH)
 	{
-		// Get the key number in the fifth octave
 		*octaveKeyIndex = pianoKeyIndex - C5;
 		return SAMPLE_C5;
 	}
-	// For a sample closest to Sample C6
 	else if (pianoKeyIndex >= C6_LOW && pianoKeyIndex <= C6_HIGH)
 	{
-		// Get the key number in the sixth octave
 		*octaveKeyIndex = pianoKeyIndex - C6;
 		return SAMPLE_C6;
 	}
-	// For a sample closest to Sample C7
 	else if (pianoKeyIndex >= C7_LOW && pianoKeyIndex <= C7_HIGH)
 	{
-		// Get the key number in the seventh octave
 		*octaveKeyIndex = pianoKeyIndex - C7;
 		return SAMPLE_C7;
-	}
-	// For a sample closest to Sample C8
-	else if (pianoKeyIndex >= C8_LOW && pianoKeyIndex <= C8_HIGH)
-	{
-		// Get the key number in the eighth octave
-		*octaveKeyIndex = pianoKeyIndex - C8;
-		return SAMPLE_C8;
 	}
 	return NULL;
 }
 
 /*
-	Name: 			void generateSound(int pianoKeyIndex, Sample **outputSoundSample)
+	Name: 			void generateSound(pianoKeyIndex, outputSoundSample)
 
 	Description: 	Generate a sound sample of the given index
 
 	Inputs:
-			int 		pianoKeyIndex		The index of the piano key (1 to 88)
+			int 		pianoKeyIndex			The index of the piano key (1 to 61)
 
 	Outputs:
-			Sample**	outputSoundSample 	The address of the output sample waveform
+			Sample**	outputSoundSample 		The address of the output sample waveform
 */
 void generateSound(int pianoKeyIndex, Sample **outputSoundSample)
 {
-	// Perform pitch shift on the Sample C1
-	if (pianoKeyIndex >= C1_LOW && pianoKeyIndex <= C1_HIGH)
-	{
-		pitchshift(&SAMPLE_C1, outputSoundSample, pianoKeyIndex - C1);
-	}
-	// Perform pitch shift on the Sample C2
-	else if (pianoKeyIndex >= C2_LOW && pianoKeyIndex <= C2_HIGH)
+	if (pianoKeyIndex >= C2_LOW && pianoKeyIndex <= C2_HIGH)
 	{
 		pitchshift(&SAMPLE_C2, outputSoundSample, pianoKeyIndex - C2);
 	}
-	// Perform pitch shift on the Sample C3
 	else if (pianoKeyIndex >= C3_LOW && pianoKeyIndex <= C3_HIGH)
 	{
 		pitchshift(&SAMPLE_C3, outputSoundSample, pianoKeyIndex - C3);
 	}
-	// Perform pitch shift on the Sample C4
 	else if (pianoKeyIndex >= C4_LOW && pianoKeyIndex <= C4_HIGH)
 	{
 		pitchshift(&SAMPLE_C4, outputSoundSample, pianoKeyIndex - C4);
 	}
-	// Perform pitch shift on the Sample C5
 	else if (pianoKeyIndex >= C5_LOW && pianoKeyIndex <= C5_HIGH)
 	{
 		pitchshift(&SAMPLE_C5, outputSoundSample, pianoKeyIndex - C5);
 	}
-	// Perform pitch shift on the Sample C6
 	else if (pianoKeyIndex >= C6_LOW && pianoKeyIndex <= C6_HIGH)
 	{
 		pitchshift(&SAMPLE_C6, outputSoundSample, pianoKeyIndex - C6);
 	}
-	// Perform pitch shift on the Sample C7
 	else if (pianoKeyIndex >= C7_LOW && pianoKeyIndex <= C7_HIGH)
 	{
 		pitchshift(&SAMPLE_C7, outputSoundSample, pianoKeyIndex - C7);
-	}
-	// Perform pitch shift on the Sample C8
-	else if (pianoKeyIndex >= C8_LOW && pianoKeyIndex <= C8_HIGH)
-	{
-		pitchshift(&SAMPLE_C8, outputSoundSample, pianoKeyIndex - C8);
 	}
 }

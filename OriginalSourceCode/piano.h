@@ -1,19 +1,19 @@
 /*
 *********************************************************************************************************
 *
-*                                       PIANO HEADER CODE
+*                                          PIANO HEADER CODE
 *
-*                                         CYCLONE V SOC
+*                                            CYCLONE V SOC
 *
-* Filename      : piano.c
+* Filename      : piano.h
 * Version       : V1.00
-* References    : Changes to this project include reference to:
+* Programmer(s) : Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
+* References    : Changes to this project include referenced and modified code from:
 * 				  		Title: "Pianoputer"
 * 				  		Original Author: Zulko
 * 				  		Date accessed: Jan 31, 2018
 * 				  		https://github.com/Zulko/pianoputer
-* Creation 		: January 30, 2018
-* Created by 	: Mingjun Zhao (zhao2@ualberta.ca ), Daniel Tran (dtran3@ualberta.ca)
+*
 *********************************************************************************************************
 * Note(s)       : This file is mainly a sample based piano synthesizer which takes
 				  in a sample piano sound waveform (Middle C) and transforms it into
@@ -30,39 +30,57 @@
 
 #define PI 3.1415926535897932384626
 
-#define C1 4
-#define C2 16
-#define C3 28
-#define C4 40
-#define C5 52
-#define C6 64
-#define C7 76
-#define C8 88
+//#define C1 4
+//#define C2 16
+//#define C3 28
+//#define C4 40
+//#define C5 52
+//#define C6 64
+//#define C7 76
+//#define C8 88
 
-#define C1_LOW 1
-#define C1_HIGH 10
-#define C2_LOW 11
-#define C2_HIGH 22
-#define C3_LOW 23
-#define C3_HIGH 34
-#define C4_LOW 35
-#define C4_HIGH 46
-#define C5_LOW 47
-#define C5_HIGH 58
-#define C6_LOW 59
-#define C6_HIGH 70
-#define C7_LOW 71
-#define C7_HIGH 82
-#define C8_LOW 83
-#define C8_HIGH 88
+//#define C1_LOW 1
+//#define C1_HIGH 10
+//#define C2_LOW 11
+//#define C2_HIGH 22
+//#define C3_LOW 23
+//#define C3_HIGH 34
+//#define C4_LOW 35
+//#define C4_HIGH 46
+//#define C5_LOW 47
+//#define C5_HIGH 58
+//#define C6_LOW 59
+//#define C6_HIGH 70
+//#define C7_LOW 71
+//#define C7_HIGH 82
+//#define C8_LOW 83
+//#define C8_HIGH 88
+
+#define C2 1
+#define C3 13
+#define C4 25
+#define C5 37
+#define C6 49
+#define C7 61
+
+#define C2_LOW 1
+#define C2_HIGH 7
+#define C3_LOW 8
+#define C3_HIGH 19
+#define C4_LOW 20
+#define C4_HIGH 31
+#define C5_LOW 32
+#define C5_HIGH 43
+#define C6_LOW 44
+#define C6_HIGH 55
+#define C7_LOW 56
+#define C7_HIGH 67
 
 #define WINDOW_SIZE 1024
 #define H 256
 #define MAX_STRETCH_ARRAY_SIZE 300000
 #define MAX_PITCH_SHIFT_OUTPUT_ARRAY_SIZE 210000
 #define MAX_TEMP_FLOAT_ARRAY_SIZE 300000
-
-extern kiss_fft_cfg cfg, cfg_i;
 
 typedef struct {
     short  *data;
@@ -87,6 +105,5 @@ void pitchshift(Sample **inputSoundSample, Sample **outputSoundSample, int num_s
 void speedx(Sample **inputSoundSample, Sample **outputSoundSample, float factor);
 void superposition(Sample **inputSoundSample1, Sample **inputSoundSample2, Sample **outputSoundSample, int offset);
 void stretch(Sample **inputSoundSample, Sample **outputSoundSample, float factor);
-void pitchshiftTest(void);
 Sample *sizeOfSound(int pianoKeyIndex, int *octaveKeyIndex);
 void generateSound(int pianoKeyIndex, Sample **outputSoundSample);

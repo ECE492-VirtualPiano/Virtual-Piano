@@ -5,16 +5,15 @@
 *
 *                                            CYCLONE V SOC
 *
-* Filename     			 : video.c
-* Version      			 : V1.00
-* References    		 : Changes to this project include referenced and modified code from:
-* 				  				Title: "VGA display of video input using a bus_master to copy input image"
-* 				  				Original Author: Bruce Land (bruce.land@cornell.edu)
-* 				  				Date accessed: Feb 2, 2018
-* 				  				Used with Permission from Author
-* 				  				http://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/Bus_master_slave_index.html
-* Creation/Reference Date: Feb 2, 2018
-* Modified By			 : Alvin Huang (aehuang@ualberta.ca), Kevin Wong (kwong4@ualberta.ca)
+* Filename      : video.c
+* Version       : V1.00
+* References    : Changes to this project include referenced and modified code from:
+* 				  		Title: "VGA display of video input using a bus_master to copy input image"
+* 				  		Original Author: Bruce Land (bruce.land@cornell.edu)
+* 				  		Date accessed: Feb 2, 2018
+* 				  		Used with Permission from Author
+* 				  		http://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/Bus_master_slave_index.html
+*
 *********************************************************************************************************
 * Note(s)       : This is a Video and VGA driver for the Altera University IP "VGA Controller" and "Video-In Decoder",
 * 				  for use with the DE1-SoC.  This code was referenced from Bruce Land's "VGA display of video input using
@@ -24,15 +23,15 @@
 *
 *********************************************************************************************************
 */
-
-#include "../Video/video.h"
+#include "video.h"
+#include <address_map_arm_brl4.h>
 
 /****************************************************************************************
  * Subroutine to read a pixel from the video input
 ****************************************************************************************/
 int video_in_read_pixel(volatile unsigned int * video_in_ptr, int x, int y){
-	char  *pixel_ptr;
-	pixel_ptr = (char *)video_in_ptr + ((y)<<9) + (x);
+	short *pixel_ptr;
+	pixel_ptr = (short*)((char*)video_in_ptr + ((((y)<<9) + (x))<<1));
 	return *pixel_ptr;
 }
 
@@ -40,8 +39,8 @@ int video_in_read_pixel(volatile unsigned int * video_in_ptr, int x, int y){
  * Subroutine to read a pixel from the VGA monitor
 ****************************************************************************************/
 int  VGA_read_pixel(volatile unsigned int * vga_pixel_ptr, int x, int y){
-	char  *pixel_ptr;
-	pixel_ptr = (char *)vga_pixel_ptr + ((y)<<10) + (x);
+	short *pixel_ptr;
+	pixel_ptr = (short*)((char *)vga_pixel_ptr + ((((y)<<10) + (x))<<1));
 	return *pixel_ptr;
 }
 
@@ -57,7 +56,7 @@ int  VGA_read_pixel(volatile unsigned int * vga_pixel_ptr, int x, int y){
 void VGA_box(volatile unsigned int * vga_pixel_ptr, int x1, int y1, int x2, int y2, short pixel_color)
 {
 	// Buffer Pixel Pointer
-	char *pixel_ptr ;
+	int *pixel_ptr ;
 
 	// Row and Column indexes
 	int row, col;
@@ -99,10 +98,10 @@ void VGA_box(volatile unsigned int * vga_pixel_ptr, int x1, int y1, int x2, int 
 		for (col = x1; col <= x2; ++col)
 		{
 			// Set address of current index
-			pixel_ptr = (char *)vga_pixel_ptr + (row<<10) + col ;
+			pixel_ptr = (int*)((char *)vga_pixel_ptr + (((row<<10) + col)<<1));
 
 			// Set Pixel Color
-			*(char *)pixel_ptr = pixel_color;
+			*(short *)pixel_ptr = pixel_color;
 		}
 }
 
@@ -120,7 +119,7 @@ void VGA_line(volatile unsigned int * vga_pixel_ptr, int x1, int y1, int x2, int
 	signed int dx,dy,j, temp;
 	signed int s1,s2, xchange;
     signed int x,y;
-	char *pixel_ptr ;
+	int *pixel_ptr ;
 
 	/* Check and Fix line coordinates to be valid */
 	if (x1 > (VIDEO_IN_WIDTH - 1)) {
@@ -196,10 +195,10 @@ void VGA_line(volatile unsigned int * vga_pixel_ptr, int x1, int y1, int x2, int
 	for (j=0; j<=dx; j++) {
 
 		// Set address of current index
-		pixel_ptr = (char *)vga_pixel_ptr + (y<<10) + x;
+		pixel_ptr = (int*) ((char *)vga_pixel_ptr + (((y<<10) + x) << 1));
 
 		// Set Pixel Color
-		*(char *)pixel_ptr = c;
+		*(short *)pixel_ptr = c;
 
 		// Check if e greater or equal to than 0
 		if (e >= 0) {
@@ -227,4 +226,45 @@ void VGA_line(volatile unsigned int * vga_pixel_ptr, int x1, int y1, int x2, int
 		// Increment e by change in y left shifted by 1
 		e = e + ((int)dy << 1);
 	}
+}
+
+/*
+	Name: 			float GetLuminFromPixel(pixel)
+
+	Description:	Return the luminous value of HSL converted from RGB
+
+	Inputs:
+			int 	pixel					The color of the pixel
+
+	Outputs:
+			float 	luminousValue 			The luminous value of the pixel (from 0 to 1)
+*/
+float GetLuminFromPixel(int pixel)
+{
+	// Retrieve r,g,b from the pixel and shift them to be 8-bit (0 to 255)
+	float r = ((pixel & COLOR_RED) >> 8) / 255.0f;
+	float g = ((pixel & COLOR_GREEN) >> 3) / 255.0f;
+	float b = ((pixel & COLOR_BLUE) << 3) / 255.0f;
+
+	// Get the max and min from the r,g,b
+	float cmax = r, cmin = r;
+	if (g > cmax)
+	{
+		cmax = g;
+	}
+	else if (g < cmin)
+	{
+		cmin = g;
+	}
+
+	if (b > cmax)
+	{
+		cmax = b;
+	}
+	else if (b < cmin)
+	{
+		cmin = b;
+	}
+
+	return (cmax + cmin) / 2;
 }

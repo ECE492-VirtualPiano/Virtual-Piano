@@ -5,18 +5,19 @@
 *
 *                                            CYCLONE V SOC
 *
-* Filename      			: Virtual_Piano.v
-* Version       			: V1.00
-* References    			: Changes to this project include referenced and modified code from:
-* 				  					Title: "VGA display of video input using a bus_master to copy input image"
-*			 				  		Original Author: Bruce Land (bruce.land@cornell.edu)
-* 							  		Date accessed: Feb 2, 2018
-* 				  					Used with Permission from Author
-* 				  					http://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/Bus_master_slave_index.html
-* Creation/Reference Date 	: Feb 2, 2018
-* Modified By 				: Alvin Huang (aehuang@ualberta.ca), Kevin Wong (kwong4@ualberta.ca)
+* Filename      : Virtual_Piano.v
+* Version       : V1.00
+* Programmer(s) : Bruce Land (bruce.land@cornell.edu)
+* Modifications	: Kevin Wong and Alvin Huang.
+* 				  			Changes to this project include referenced and modified code from:
+* 				  			Title: "VGA display of video input using a bus_master to copy input image"
+* 				  			Original Author: Bruce Land (bruce.land@cornell.edu)
+* 				  			Date accessed: Feb 2, 2018
+* 				  			Used with Permission from Author
+* 				  			http://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/Bus_master_slave_index.html
+*
 *********************************************************************************************************
-* Note(s)       : Virtual Piano Top Level DE1-SoC
+* Note(s)       : Virtual Piano TopLevel DE1-SoC
 *
 * Copyright     : Copyright Cornell University February 28, 2018
 *
@@ -389,11 +390,11 @@ reg [19:0] hs_count;
 
 // Pixel address
 reg [9:0] vga_x_cood, vga_y_cood, video_in_x_cood, video_in_y_cood;
-reg [7:0] current_pixel_color1, current_pixel_color2;
+reg [15:0] current_pixel_color1, current_pixel_color2;
 
 // Compute address
-assign vga_bus_addr = vga_out_base_address + {22'b0,video_in_x_cood + vga_x_cood} + ({22'b0,video_in_y_cood + vga_y_cood}<<10);
-assign video_in_bus_addr = video_in_base_address + {22'b0,video_in_x_cood} + ({22'b0,video_in_y_cood}<<9);	 
+assign vga_bus_addr = (vga_out_base_address + (({22'b0,video_in_x_cood + vga_x_cood} + ({22'b0,video_in_y_cood + vga_y_cood}<<10))<<1));
+assign video_in_bus_addr = (video_in_base_address + (({22'b0,video_in_x_cood} + ({22'b0,video_in_y_cood}<<9))<<1));	 
 
 
 always @(posedge CLOCK2_50) begin //CLOCK_50
@@ -405,8 +406,8 @@ always @(posedge CLOCK2_50) begin //CLOCK_50
 		bus_write <= 0; // Set to on if a write operation to bus
 
 		// Set base address of upper-left corner of the screen
-		vga_x_cood <= 10'd100;
-		vga_y_cood <= 10'd50;
+		vga_x_cood <= 10'd0;
+		vga_y_cood <= 10'd0;
 		video_in_x_cood <= 0;
 		video_in_y_cood <= 0;
 	   bus_byte_enable <= 4'b0001;
@@ -427,7 +428,7 @@ always @(posedge CLOCK2_50) begin //CLOCK_50
 		
 		// Read all the pixels in the video input
 		video_in_x_cood <= video_in_x_cood + 10'd1;
-		if (video_in_x_cood > 10'd319) begin
+		if (video_in_x_cood > 10'd509) begin
 			video_in_x_cood <= 0;
 			video_in_y_cood <= video_in_y_cood + 10'd1;
 			if (video_in_y_cood > 10'd239) begin
